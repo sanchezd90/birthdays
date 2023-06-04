@@ -4,9 +4,13 @@ import { StatusBar } from 'expo-status-bar';
 import Navbar from './components/Navbar'
 import {useFonts} from 'expo-font'
 import AppLoading from 'expo-app-loading'
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Geburstage from './screens/geburtstage/Geburtstage';
+import { Contact } from './screens/contact/Contact';
+
+const Stack = createNativeStackNavigator()
 
 export default function App() {
 
@@ -23,7 +27,12 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style='light'/>
       <SafeAreaView style={{flex:1}}>        
-        <Geburstage/>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name='Geburtstage' component={Geburstage}/>
+            <Stack.Screen name='Contact' component={Contact}/>
+          </Stack.Navigator>          
+        </NavigationContainer>        
         <Navbar/>
       </SafeAreaView>
     </View>

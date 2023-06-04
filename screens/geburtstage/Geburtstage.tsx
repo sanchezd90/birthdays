@@ -1,11 +1,11 @@
 import React, {useState} from "react"
-import {View, StyleSheet, Text, Button, FlatList} from 'react-native'
+import {View, StyleSheet, Text, Button, FlatList, Pressable} from 'react-native'
 import ContactCard from '../../components/ContactCard';
 import {contacts} from '../../contacts.json'
 import ActionBar from '../../components/ActionBar';
 import NewContactModal from "../../components/NewContactModal";
 
-export const Geburstage = () => {
+export const Geburstage = ({navigation}:any) => {
 
     const [showNewContactModal, setShowNewContactModal] = useState<boolean>(false)
 
@@ -16,6 +16,10 @@ export const Geburstage = () => {
 
     const handleCloseModal = () => {
         setShowNewContactModal(false)
+    }
+
+    const handleContactPress = (id:string) => {
+        navigation.navigate('Contact',{id})
     }
 
     return <View style={{flex:10}}>
@@ -31,7 +35,9 @@ export const Geburstage = () => {
                 data={contacts}                
                 renderItem={(itemData)=>{
                     return (
-                    <ContactCard contact={itemData.item}/>
+                        <Pressable onPress={()=>handleContactPress(itemData.item.id)}>                        
+                            <ContactCard contact={itemData.item}/>
+                        </Pressable>
                     )
                 }}
                 keyExtractor={item=>{
