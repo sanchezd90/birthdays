@@ -6,7 +6,7 @@ import {useFonts} from 'expo-font'
 import AppLoading from 'expo-app-loading'
 
 
-import Geburstage from './screens/geburtstage/Geburtstage';
+import Geburtstage from './screens/geburtstage/Geburtstage';
 
 export default function App() {
 
@@ -23,7 +23,7 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style='light'/>
       <SafeAreaView style={{flex:1}}>        
-        <Geburstage/>
+        <Geburtstage/>
         <Navbar/>
       </SafeAreaView>
     </View>

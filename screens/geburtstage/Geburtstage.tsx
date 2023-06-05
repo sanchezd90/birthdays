@@ -1,13 +1,15 @@
-import React, {useState} from "react"
-import {View, StyleSheet, Text, Button, FlatList} from 'react-native'
+import React, {useState, useEffect} from "react"
+import {View, StyleSheet, Text, FlatList, SectionList} from 'react-native'
 import ContactCard from '../../components/ContactCard';
 import {contacts} from '../../contacts.json'
 import ActionBar from '../../components/ActionBar';
 import NewContactModal from "../../components/NewContactModal";
+import { months, groupByMonth, belongsToMonth } from "../../utils/common";
 
-export const Geburstage = () => {
+export const Geburtstage = () => {
 
     const [showNewContactModal, setShowNewContactModal] = useState<boolean>(false)
+    const [groupedContacts, setGroupedContacts] = useState([]) 
 
     const handleNewContactAction = () => {
         setShowNewContactModal(true)
@@ -16,35 +18,36 @@ export const Geburstage = () => {
 
     const handleCloseModal = () => {
         setShowNewContactModal(false)
-    }
+    }    
+
+    useEffect(() => {
+      setGroupedContacts(groupByMonth(contacts) as any)      
+    }, [])    
 
     return <View style={{flex:10}}>
         <ActionBar handleNewContactAction={handleNewContactAction}/>
         <NewContactModal show={showNewContactModal} onClose={handleCloseModal}/>
-        <View style={styles.mainView}>        
-            <View style={styles.monthWrapper}>
-            <Text style={styles.monthTitle}>
-                März 2023
-            </Text>
-            <View>
-                <FlatList
-                data={contacts}                
+        <View style={styles.mainView}>            
+            <SectionList
+                sections={groupedContacts}
+                keyExtractor={(item, index) => item + index}
                 renderItem={(itemData)=>{
-                    return (
-                    <ContactCard contact={itemData.item}/>
+                    return (<View style={styles.contact}>
+                        <ContactCard contact={itemData.item}/>
+                    </View>
                     )
                 }}
-                keyExtractor={item=>{
-                    return item.id
-                }}
-                />              
-            </View>
-            </View>                
+                renderSectionHeader={({section: {name}}) => (
+                    <Text style={styles.monthTitle}> 
+                        {name}                   
+                    </Text>  
+                )}                                
+                />                          
         </View>
     </View>
 }
 
-export default Geburstage
+export default Geburtstage
 
 const styles = StyleSheet.create({
     mainView: {
@@ -66,10 +69,11 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontSize: 18,
         fontWeight: '600',
-        paddingLeft: 15
-      },
-      
-      monthWrapper: {
-    
-      }
+        paddingLeft: 15,    
+        marginTop:15,
+        marginBottom:10    
+      },  
+      contact:{
+        marginBottom:15
+      }           
 })

@@ -13,14 +13,14 @@ export const Navbar = () => {
         
         <Pressable 
             style={({pressed})=> pressed ? styles.pressedButtonWrapper : styles.buttonWrapper}
-            onPress={()=>handleButtonPress('geburstage')}
+            onPress={()=>handleButtonPress('Geburtstage')}
         >
           <View>
             <View style={{alignItems:'center'}}>
               <MaterialIcons name='cake' size={40} color={'#285afc'}/>
             </View>
             <Text style={styles.text}>
-              Geburstage
+              Geburtstage
             </Text>
           </View>
         </Pressable>
