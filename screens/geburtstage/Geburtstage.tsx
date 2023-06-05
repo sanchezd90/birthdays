@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react"
-import {View, StyleSheet, Text, FlatList, SectionList} from 'react-native'
+import {View, StyleSheet, Text, SectionList} from 'react-native'
 import ContactCard from '../../components/ContactCard';
 import {contacts} from '../../contacts.json'
 import ActionBar from '../../components/ActionBar';
 import NewContactModal from "../../components/NewContactModal";
-import { months, groupByMonth, belongsToMonth } from "../../utils/common";
+import { groupByMonth } from "../../utils/common";
 
 export const Geburtstage = () => {
 

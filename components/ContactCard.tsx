@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text,View } from 'react-native';
+import { parseDay } from '../utils/common';
 
 interface ContactProps {
     contact:{
@@ -17,7 +18,8 @@ export const ContactCard = ({contact}:ContactProps) =>{
 
                 </View>
                 <View style={styles.contactContainer}>
-                  <View style={{ width: '20%' }}>
+                  <View style={{ width: '20%', justifyContent:'center', alignItems:'center', paddingVertical: 10 }}>
+                    <Text style={{ color: 'white', fontSize: 30 }}>{parseDay(contact.birthdate)}</Text>
                   </View>
                   <View style={{ width: '60%', paddingVertical: 10 }}>
                     <Text style={{ color: 'white', fontSize: 18 }}>{contact.firstName} {contact.lastName}</Text>
