@@ -1,5 +1,6 @@
 import React, {useState} from "react"
-import {StyleSheet,View,Modal,Text,Pressable, TextInput} from 'react-native'
+import {StyleSheet,View,Modal,Text,Pressable} from 'react-native'
+import { TextInput } from 'react-native-paper';
 
 interface NewContactModalProps {
     show:boolean,
@@ -25,33 +26,29 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
                         <Text style={{...styles.headerText,color:'gray'}}>Fertig</Text>
                     </Pressable>                                     
                 </View>
-                <View style={styles.formWrapper}>
-                    <View style={styles.customInput}>
+                <View style={styles.formWrapper}>                    
                         <TextInput 
                             style={styles.textInput}
                             placeholder='Vorname'
                             value={firstName}
                             onChangeText={setFirstName}
-                            placeholderTextColor='white'
-                        />
-                    </View>
-                    <View style={styles.customInput}>
+                            mode='outlined'   
+                            outlineColor="gray"                         
+                            activeOutlineColor="#285afc"
+                            textColor='white'
+                        />                                        
                         <TextInput 
                             style={styles.textInput}
                             placeholder='Nachname'
                             value={lastName}
-                            onChangeText={setLastName}
-                            placeholderTextColor='white'
-                        />
-                    </View>
-                    <View style={styles.customInput}>
-                        <TextInput 
-                            style={styles.textInput}
-                            placeholder='Name'
-                        />
-                    </View>
+                            onChangeText={setLastName} 
+                            mode='outlined'    
+                            outlineColor="gray"   
+                            activeOutlineColor="#285afc"   
+                            textColor='white'                    
+                        />                                                                                                        
                 </View>
-            </View>         
+            </View> 
         </Modal>
     )
 }
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
         color:'white'        
     },
     textInput:{
-        color:'white',
-        fontSize:20,                 
+        backgroundColor:'#303030',
+        fontSize:20,            
     },
 })

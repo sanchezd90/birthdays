@@ -11,6 +11,7 @@ import Home from './screens/home/Home';
 import Einstellungen from './screens/einstellungen/Einstellungen';
 import { NavigationContainer } from '@react-navigation/native';
 import {MaterialIcons} from '@expo/vector-icons'
+import { PaperProvider } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,37 +27,38 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar style='light'/>
-      <SafeAreaView style={{flex:1}}>
-        <NavigationContainer>
-          <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName=''
-    
-                if (route.name === 'Home') {
-                  iconName = 'calendar-today'                    
-                } else if (route.name === 'Geburtstage') {
-                  iconName = 'cake'                
-                } else if (route.name === 'Einstellungen') {
-                  iconName = 'settings'
-                } 
-    
-                // You can return any component that you like here!
-                return <MaterialIcons name={iconName as any} size={25} color={'#285afc'}/>
-              },
-              tabBarStyle: { backgroundColor: '#1c1c1c' },
-              headerShown:false
-            })}
-          >
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Geburtstage" component={Geburtstage} />
-            <Tab.Screen name="Einstellungen" component={Einstellungen} />
-          </Tab.Navigator>
-        </NavigationContainer>                        
-      </SafeAreaView>
-    </View>
+    <PaperProvider>
+      <View style={styles.container}>
+        <StatusBar style='light'/>
+        <SafeAreaView style={{flex:1}}>
+          <NavigationContainer>
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: () => {
+                  let iconName=''
+      
+                  if (route.name === 'Home') {
+                    iconName = 'calendar-today'                    
+                  } else if (route.name === 'Geburtstage') {
+                    iconName = 'cake'                
+                  } else if (route.name === 'Einstellungen') {
+                    iconName = 'settings'
+                  } 
+                      
+                  return <MaterialIcons name={iconName as any} size={25} color={'#285afc'}/>
+                },
+                tabBarStyle: { backgroundColor: '#1c1c1c' },
+                headerShown:false
+              })}
+            >
+              <Tab.Screen name="Home" component={Home} />
+              <Tab.Screen name="Geburtstage" component={Geburtstage} />
+              <Tab.Screen name="Einstellungen" component={Einstellungen} />
+            </Tab.Navigator>
+          </NavigationContainer>                        
+        </SafeAreaView>
+      </View>
+    </PaperProvider>
   );
 }
 
