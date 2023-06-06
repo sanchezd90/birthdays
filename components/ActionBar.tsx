@@ -15,35 +15,20 @@ const ActionBar = ({handleNewContactAction}:ActionBarProps) => {
 
     return (
         <View style={styles.actionsSection}>
-            <Pressable 
-                onPress={()=>handleButtonPress('a')}  
-                style={({pressed})=>pressed ? styles.pressedActionWrapper : styles.actionWrapper}
-            >
-              
-            </Pressable>
-            <Pressable 
-                onPress={()=>handleButtonPress('b')}  
-                style={({pressed})=>pressed ? styles.pressedActionWrapper : styles.actionWrapper}
-            >
-              
-            </Pressable>   
-        <View style={styles.titleWrapper}>
-          <Text style={styles.header}>
-            Geburtstage
-          </Text>
-        </View>
-            <Pressable 
-                onPress={()=>handleButtonPress('c')}  
-                style={({pressed})=>pressed ? styles.pressedActionWrapper : styles.actionWrapper}
-            >
-                
-            </Pressable>
-            <Pressable 
-                onPress={()=>handleButtonPress('new-contact')}  
-                style={({pressed})=>pressed ? styles.pressedActionWrapper : styles.actionWrapper}
-            >
-                <AntDesign name='plus' size={40} color={'white'}/>            
-            </Pressable>        
+             
+            <View style={styles.titleWrapper}>
+                <Text style={styles.header}>
+                    Geburtstage
+                </Text>
+            </View>
+            <View style={{position:'absolute',top:10,right:10}}>
+                <Pressable 
+                    onPress={()=>handleButtonPress('new-contact')}  
+                    style={({pressed})=>pressed ? styles.pressedActionWrapper : styles.actionWrapper}
+                >
+                    <AntDesign name='plus' size={40} color={'white'}/>            
+                </Pressable>        
+            </View>            
       </View>
     )
 }
@@ -56,31 +41,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#1c1c1c',
         borderBottomWidth: 0.2,
-        borderBottomColor: '#8c8b8b',
+        position:'relative'        
     },
     actionWrapper: {
         flex: 1,
         justifyContent: 'center',
-        alignItems:'center',
-        borderColor: '#8c8b8b',
-        borderWidth: 0.2
+        alignItems:'center',        
     },
     pressedActionWrapper: {
         flex: 1,
         justifyContent: 'center',
         alignItems:'center',
-        borderColor: '#8c8b8b',
-        borderWidth: 0.2,
+       
         backgroundColor:'#4a4a4a'
     },
-    header: {
+    header: {        
         color: 'white',        
         fontSize: 18,
         textAlign: 'center',
         fontFamily:'open-sans-bold'
     },
     titleWrapper: {
-        flex: 3,
+        flex: 1,
         justifyContent: 'center'
     },
 })
