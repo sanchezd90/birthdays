@@ -1,6 +1,7 @@
 import React, {useState} from "react"
-import {StyleSheet,View,Modal,Text,Pressable} from 'react-native'
-import { TextInput } from 'react-native-paper';
+import {StyleSheet,View,Modal,Text,Pressable, Platform, Button} from 'react-native'
+import { Switch, TextInput } from 'react-native-paper';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface NewContactModalProps {
     show:boolean,
@@ -10,7 +11,24 @@ interface NewContactModalProps {
 export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
 
     const [firstName,setFirstName] = useState<string>('')
-    const [lastName,setLastName] = useState<string>('')    
+    const [lastName,setLastName] = useState<string>('')
+    const [date, setDate] = useState(new Date());
+    const [hasReminder,setHasReminder] = useState<boolean>(false)    
+
+    const onChange = (event:any, selectedDate:any) => {
+        const currentDate = selectedDate;        
+        setDate(currentDate);
+    };
+
+    const handleSubmit = () => {
+        const payload = {
+            firstName,
+            lastName,
+            date,
+            hasReminder
+        }
+        console.log(payload);
+    }
 
     return (
         <Modal style={styles.modalWrapper} visible={show} animationType='slide'>
@@ -22,31 +40,44 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
                     <View style={styles.headerOption}>
                         <Text style={{...styles.headerText,color:'white'}}>Info</Text>
                     </View>   
-                    <Pressable style={styles.headerOption}>
-                        <Text style={{...styles.headerText,color:'gray'}}>Fertig</Text>
+                    <Pressable style={styles.headerOption} disabled={!firstName||!lastName} onPress={handleSubmit}>
+                        <Text style={{...styles.headerText,color:firstName&&lastName?'white':'gray'}}>Fertig</Text>
                     </Pressable>                                     
                 </View>
-                <View style={styles.formWrapper}>                    
-                        <TextInput 
-                            style={styles.textInput}
-                            placeholder='Vorname'
-                            value={firstName}
-                            onChangeText={setFirstName}
-                            mode='outlined'   
-                            outlineColor="gray"                         
-                            activeOutlineColor="#285afc"
-                            textColor='white'
-                        />                                        
-                        <TextInput 
-                            style={styles.textInput}
-                            placeholder='Nachname'
-                            value={lastName}
-                            onChangeText={setLastName} 
-                            mode='outlined'    
-                            outlineColor="gray"   
-                            activeOutlineColor="#285afc"   
-                            textColor='white'                    
-                        />                                                                                                        
+                <View style={styles.formWrapper}>
+                    <Text style={styles.labels}>Vorname</Text>                    
+                    <TextInput 
+                        style={styles.textInput}
+                        placeholder='Vorname'
+                        value={firstName}
+                        onChangeText={setFirstName}
+                        mode='outlined'   
+                        outlineColor="gray"                         
+                        activeOutlineColor="#285afc"
+                        textColor='white'
+                    />            
+                    <Text style={styles.labels}>Nachname</Text>                             
+                    <TextInput 
+                        style={styles.textInput}
+                        placeholder='Nachname'
+                        value={lastName}
+                        onChangeText={setLastName} 
+                        mode='outlined'    
+                        outlineColor="gray"   
+                        activeOutlineColor="#285afc"   
+                        textColor='white'                    
+                    />             
+                    <Text style={styles.labels}>Geburtstag Datum</Text>                                                                                                            
+                    <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={'date'}
+                    is24Hour={true}
+                    onChange={onChange}
+                    style={styles.datePicker}
+                    /> 
+                    <Text style={styles.labels}>Benachrichtigung</Text>                   
+                    <Switch value={hasReminder} onValueChange={()=>setHasReminder(!hasReminder)} color="#285afc" style={{marginTop:4}}/>
                 </View>
             </View> 
         </Modal>
@@ -94,4 +125,14 @@ const styles = StyleSheet.create({
         backgroundColor:'#303030',
         fontSize:20,            
     },
+    datePicker:{
+        marginTop:5,
+        backgroundColor:'#303030', 
+        width:75
+    },
+    labels:{
+        color:'white',
+        fontSize:18,
+        marginTop:5
+    }
 })
