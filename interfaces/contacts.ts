@@ -1,6 +1,7 @@
 export interface IContact {
-    id:string
+    id?:string
     firstName:string
     lastName:string
-    birthdate:string
+    birthdate:any
+    hasReminder:boolean
 }

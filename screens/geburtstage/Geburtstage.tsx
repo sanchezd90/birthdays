@@ -1,28 +1,27 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import {View, StyleSheet, Text, SectionList} from 'react-native'
 import ContactCard from '../../components/ContactCard';
-import {contacts} from '../../contacts.json'
 import ActionBar from '../../components/ActionBar';
 import NewContactModal from "../../components/NewContactModal";
 import { groupByMonth } from "../../utils/common";
+import { ContactsContext } from "../../store/context/contacts-context";
 
 export const Geburtstage = () => {
-
+    const {contacts} = useContext(ContactsContext)
     const [showNewContactModal, setShowNewContactModal] = useState<boolean>(false)
     const [groupedContacts, setGroupedContacts] = useState([]) 
 
     const handleNewContactAction = () => {
-        setShowNewContactModal(true)
-        console.log('show modal');
+        setShowNewContactModal(true)        
     }
 
     const handleCloseModal = () => {
         setShowNewContactModal(false)
     }    
 
-    useEffect(() => {
-      setGroupedContacts(groupByMonth(contacts) as any)      
-    }, [])    
+    useEffect(() => {      
+      setGroupedContacts(groupByMonth(contacts))           
+    }, [contacts])    
 
     return <View style={{flex:10}}>
         <ActionBar handleNewContactAction={handleNewContactAction}/>
@@ -37,11 +36,12 @@ export const Geburtstage = () => {
                     </View>
                     )
                 }}
-                renderSectionHeader={({section: {name}}) => (
+                renderSectionHeader={({section}) => {
+                  if(section.data.length>0)return(                    
                     <Text style={styles.monthTitle}> 
-                        {name}                   
+                        {section.name}                   
                     </Text>  
-                )}                                
+                )}}                                
                 />                          
         </View>
     </View>

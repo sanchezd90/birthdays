@@ -8,8 +8,7 @@ interface ActionBarProps {
 
 const ActionBar = ({handleNewContactAction}:ActionBarProps) => {
 
-    const handleButtonPress = (action:string) => {
-        console.log(`${action} is being pressed`)
+    const handleButtonPress = (action:string) => {        
         if(action==='new-contact') handleNewContactAction()
       }
 

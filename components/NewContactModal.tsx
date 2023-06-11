@@ -1,33 +1,43 @@
-import React, {useState} from "react"
-import {StyleSheet,View,Modal,Text,Pressable, Platform, Button} from 'react-native'
+import React, {useContext, useState} from "react"
+import {StyleSheet,View,Modal,Text,Pressable} from 'react-native'
 import { Switch, TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { ContactsContext } from "../store/context/contacts-context";
+import { IContact } from "../interfaces/contacts";
 
 interface NewContactModalProps {
     show:boolean,
     onClose:()=>void
 }
 
+const initialFormData = {
+    firstName:'',
+    lastName:'',
+    birthdate:new Date().toISOString(),
+    hasReminder:false
+}
+
 export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
+    const {addContact} = useContext(ContactsContext)    
+    const [contact,setContact] = useState<IContact>(initialFormData)    
 
-    const [firstName,setFirstName] = useState<string>('')
-    const [lastName,setLastName] = useState<string>('')
-    const [date, setDate] = useState(new Date());
-    const [hasReminder,setHasReminder] = useState<boolean>(false)    
-
-    const onChange = (event:any, selectedDate:any) => {
-        const currentDate = selectedDate;        
-        setDate(currentDate);
+    const onDateChange = (event, selectedDate) => {        
+        setContact((currentContact)=>({...currentContact,birthdate:selectedDate}))
     };
+
+    const handleChange = (field,value) => {
+        setContact((currentContact)=>({...currentContact,[field]:value}))
+    }
 
     const handleSubmit = () => {
         const payload = {
-            firstName,
-            lastName,
-            date,
-            hasReminder
-        }
-        console.log(payload);
+            ...contact,
+            birthdate:contact.birthdate.toISOString().split('T')[0],
+            id:Date.now().toString(),            
+        }              
+        addContact(payload);
+        setContact(initialFormData)
+        onClose()
     }
 
     return (
@@ -40,8 +50,8 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
                     <View style={styles.headerOption}>
                         <Text style={{...styles.headerText,color:'white'}}>Info</Text>
                     </View>   
-                    <Pressable style={styles.headerOption} disabled={!firstName||!lastName} onPress={handleSubmit}>
-                        <Text style={{...styles.headerText,color:firstName&&lastName?'white':'gray'}}>Fertig</Text>
+                    <Pressable style={styles.headerOption} disabled={!contact.firstName||!contact.lastName} onPress={handleSubmit}>
+                        <Text style={{...styles.headerText,color:contact.firstName&&contact.lastName?'white':'gray'}}>Fertig</Text>
                     </Pressable>                                     
                 </View>
                 <View style={styles.formWrapper}>
@@ -49,8 +59,8 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
                     <TextInput 
                         style={styles.textInput}
                         placeholder='Vorname'
-                        value={firstName}
-                        onChangeText={setFirstName}
+                        value={contact.firstName}
+                        onChangeText={(value)=>handleChange('firstName',value)}
                         mode='outlined'   
                         outlineColor="gray"                         
                         activeOutlineColor="#285afc"
@@ -60,8 +70,8 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
                     <TextInput 
                         style={styles.textInput}
                         placeholder='Nachname'
-                        value={lastName}
-                        onChangeText={setLastName} 
+                        value={contact.lastName}
+                        onChangeText={(value)=>handleChange('lastName',value)}
                         mode='outlined'    
                         outlineColor="gray"   
                         activeOutlineColor="#285afc"   
@@ -70,14 +80,14 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
                     <Text style={styles.labels}>Geburtstag Datum</Text>                                                                                                            
                     <DateTimePicker
                     testID="dateTimePicker"
-                    value={date}
+                    value={new Date(contact.birthdate)}
                     mode={'date'}
                     is24Hour={true}
-                    onChange={onChange}
+                    onChange={onDateChange}
                     style={styles.datePicker}
                     /> 
                     <Text style={styles.labels}>Benachrichtigung</Text>                   
-                    <Switch value={hasReminder} onValueChange={()=>setHasReminder(!hasReminder)} color="#285afc" style={{marginTop:4}}/>
+                    <Switch value={contact.hasReminder} onValueChange={()=>handleChange('hasReminder',!contact.hasReminder)} color="#285afc" style={{marginTop:4}}/>
                 </View>
             </View> 
         </Modal>
