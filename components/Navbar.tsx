@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, Pressable, Image } from 'react-native'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
 import {MaterialIcons} from '@expo/vector-icons'
 
 export const Navbar = () => {
