@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react"
 import {StyleSheet,View,Modal,Text,Pressable} from 'react-native'
-import { Switch, TextInput } from 'react-native-paper';
+import { Button, Switch, TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ContactsContext } from "../store/context/contacts-context";
 import { IContact } from "../interfaces/contacts";
@@ -21,7 +21,7 @@ const initialFormData = {
 
 export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
     const {activeContact,setActiveContact,contacts} = useContext(ContactsContext)
-    const {addContact, updateContact} = useContext(ContactsContext)    
+    const {addContact, updateContact,removeContact} = useContext(ContactsContext)    
     const [contact,setContact] = useState<IContact>(initialFormData)
     const [editMode,setEditMode] = useState<boolean>(false)    
 
@@ -61,7 +61,13 @@ export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
 
     const handleClose = () => {                    
         onClose()
-    }    
+    }  
+    
+    const handleDelete = () => {
+        removeContact(activeContact)
+        setActiveContact('')
+        onClose()
+    }
 
     return (
         <Modal style={styles.modalWrapper} visible={show} animationType='slide'>
@@ -112,6 +118,9 @@ export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
                     <Text style={styles.labels}>Benachrichtigung</Text>                   
                     <Switch value={contact.hasReminder} onValueChange={()=>handleChange('hasReminder',!contact.hasReminder)} color="#285afc" style={{marginTop:4}}/>
                 </View>
+                {editMode && <Button icon='delete' mode="contained" onPress={handleDelete} style={{backgroundColor:'red',marginBottom:50,marginHorizontal:50}}>
+                    Löschen
+                </Button>}
             </View> 
         </Modal>
     )

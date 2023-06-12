@@ -7,7 +7,7 @@ export const ContactsContext = createContext({
     setActiveContact: (id:string) => {},
     addContact: (contact:IContact) => {},
     updateContact: (contact:IContact) => {},
-    removeContact: (contact:IContact) => {},
+    removeContact: (id:string) => {},
 })
 
 const ContactsContextProvider = ({children}) =>{
@@ -32,8 +32,8 @@ const ContactsContextProvider = ({children}) =>{
         setContacts(newContacts)
     }
 
-    const removeContact = (contact:IContact) => {
-        setContacts((currentContacts)=>currentContacts.filter(currentContact=>currentContact.id===contact.id))
+    const removeContact = (id:string) => {
+        setContacts((currentContacts)=>currentContacts.filter(currentContact=>currentContact.id!==id))
     }
 
     const value = {
