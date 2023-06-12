@@ -2,13 +2,17 @@ import React, { createContext, useState } from "react";
 import { IContact } from "../../interfaces/contacts";
 
 export const ContactsContext = createContext({
+    activeContact:'',
     contacts:[],
+    setActiveContact: (id:string) => {},
     addContact: (contact:IContact) => {},
+    updateContact: (contact:IContact) => {},
     removeContact: (contact:IContact) => {},
 })
 
 const ContactsContextProvider = ({children}) =>{
 
+    const [activeContact,setActiveContact] = useState<string>('')
     const [contacts, setContacts] = useState<IContact[]>([{
         id:"1",
         firstName:"Matías",
@@ -21,13 +25,23 @@ const ContactsContextProvider = ({children}) =>{
         setContacts((currentContacts)=>[...currentContacts,contact])
     }
 
+    const updateContact = (contact:IContact) => {
+        const i = contacts.findIndex(c=>c.id===contact.id)
+        const newContacts=[...contacts]        
+        newContacts[i]=contact
+        setContacts(newContacts)
+    }
+
     const removeContact = (contact:IContact) => {
         setContacts((currentContacts)=>currentContacts.filter(currentContact=>currentContact.id===contact.id))
     }
 
     const value = {
+        activeContact:activeContact,
+        setActiveContact:setActiveContact,
         contacts:contacts,
         addContact:addContact,
+        updateContact:updateContact,
         removeContact:removeContact
     }
 

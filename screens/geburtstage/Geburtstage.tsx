@@ -1,17 +1,18 @@
 import React, {useState, useEffect, useContext} from "react"
-import {View, StyleSheet, Text, SectionList} from 'react-native'
+import {View, StyleSheet, Text, SectionList, Pressable} from 'react-native'
 import ContactCard from '../../components/ContactCard';
 import ActionBar from '../../components/ActionBar';
-import NewContactModal from "../../components/NewContactModal";
+import ContactModal from "../../components/ContactModal";
 import { groupByMonth } from "../../utils/common";
 import { ContactsContext } from "../../store/context/contacts-context";
 
 export const Geburtstage = () => {
-    const {contacts} = useContext(ContactsContext)
+    const {setActiveContact,contacts} = useContext(ContactsContext)
     const [showNewContactModal, setShowNewContactModal] = useState<boolean>(false)
-    const [groupedContacts, setGroupedContacts] = useState([]) 
+    const [groupedContacts, setGroupedContacts] = useState([])     
 
-    const handleNewContactAction = () => {
+    const handleNewContactAction = () => {  
+        setActiveContact('')      
         setShowNewContactModal(true)        
     }
 
@@ -19,20 +20,28 @@ export const Geburtstage = () => {
         setShowNewContactModal(false)
     }    
 
-    useEffect(() => {      
+    const handleContactPress = (id) => {    
+      setActiveContact(id)       
+      setShowNewContactModal(true)
+    }
+
+    useEffect(() => {
+      console.log(contacts);          
       setGroupedContacts(groupByMonth(contacts))           
     }, [contacts])    
 
     return <View style={{flex:10}}>
         <ActionBar handleNewContactAction={handleNewContactAction}/>
-        <NewContactModal show={showNewContactModal} onClose={handleCloseModal}/>
+        <ContactModal show={showNewContactModal} onClose={handleCloseModal}/>
         <View style={styles.mainView}>            
             <SectionList
                 sections={groupedContacts}
                 keyExtractor={(item, index) => item + index}
                 renderItem={(itemData)=>{
                     return (<View style={styles.contact}>
-                        <ContactCard contact={itemData.item}/>
+                        <Pressable onPress={()=>{handleContactPress(itemData.item.id)}}>
+                          <ContactCard contact={itemData.item}/>
+                        </Pressable>
                     </View>
                     )
                 }}

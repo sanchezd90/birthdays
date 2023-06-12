@@ -1,25 +1,39 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {StyleSheet,View,Modal,Text,Pressable} from 'react-native'
 import { Switch, TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ContactsContext } from "../store/context/contacts-context";
 import { IContact } from "../interfaces/contacts";
 
-interface NewContactModalProps {
+interface ContactModalProps {
     show:boolean,
-    onClose:()=>void
+    onClose:()=>void,
+    id?:string
 }
 
 const initialFormData = {
+    id:'',
     firstName:'',
     lastName:'',
     birthdate:new Date().toISOString(),
     hasReminder:false
 }
 
-export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
-    const {addContact} = useContext(ContactsContext)    
-    const [contact,setContact] = useState<IContact>(initialFormData)    
+export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
+    const {activeContact,setActiveContact,contacts} = useContext(ContactsContext)
+    const {addContact, updateContact} = useContext(ContactsContext)    
+    const [contact,setContact] = useState<IContact>(initialFormData)
+    const [editMode,setEditMode] = useState<boolean>(false)    
+
+    useEffect(() => {             
+        if(activeContact){
+            setContact(contacts.find(contact=>contact.id===activeContact))
+            setEditMode(true)
+        }else{
+            setContact(initialFormData)
+            setEditMode(false)
+        }
+    }, [activeContact])
 
     const onDateChange = (event, selectedDate) => {        
         setContact((currentContact)=>({...currentContact,birthdate:selectedDate}))
@@ -32,26 +46,35 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
     const handleSubmit = () => {
         const payload = {
             ...contact,
-            birthdate:contact.birthdate.toISOString().split('T')[0],
-            id:Date.now().toString(),            
-        }              
-        addContact(payload);
+            birthdate:typeof contact.birthdate !== 'string' ?contact.birthdate.toISOString().split('T')[0]:contact.birthdate,
+            id:editMode?contact.id:Date.now().toString(),            
+        }
+        if(editMode){
+            updateContact(payload)
+        }else{
+            addContact(payload);
+        }        
         setContact(initialFormData)
+        setActiveContact('')
         onClose()
     }
+
+    const handleClose = () => {                    
+        onClose()
+    }    
 
     return (
         <Modal style={styles.modalWrapper} visible={show} animationType='slide'>
             <View style={styles.modalWrapper}>
                 <View style={styles.header}>
-                    <Pressable style={styles.headerOption} onPress={onClose}>
+                    <Pressable style={styles.headerOption} onPress={handleClose}>
                         <Text style={{...styles.headerText,color:'#285afc'}}>Abbrechen</Text>
                     </Pressable>
                     <View style={styles.headerOption}>
                         <Text style={{...styles.headerText,color:'white'}}>Info</Text>
                     </View>   
                     <Pressable style={styles.headerOption} disabled={!contact.firstName||!contact.lastName} onPress={handleSubmit}>
-                        <Text style={{...styles.headerText,color:contact.firstName&&contact.lastName?'white':'gray'}}>Fertig</Text>
+                        <Text style={{...styles.headerText,color:contact.firstName&&contact.lastName?'white':'gray'}}>{editMode?'Speichern':'Hinzufügen'}</Text>
                     </Pressable>                                     
                 </View>
                 <View style={styles.formWrapper}>
@@ -94,7 +117,7 @@ export const NewContactModal = ({show,onClose}:NewContactModalProps) => {
     )
 }
 
-export default NewContactModal
+export default ContactModal
 
 const styles = StyleSheet.create({
     modalWrapper:{
