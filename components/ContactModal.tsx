@@ -4,6 +4,7 @@ import { Button, Switch, TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ContactsContext } from "../store/context/contacts-context";
 import { IContact } from "../interfaces/contacts";
+import { insertContact } from "../utils/database";
 
 interface ContactModalProps {
     show:boolean,
@@ -43,7 +44,7 @@ export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
         setContact((currentContact)=>({...currentContact,[field]:value}))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {        
         const payload = {
             ...contact,
             birthdate:typeof contact.birthdate !== 'string' ?contact.birthdate.toISOString().split('T')[0]:contact.birthdate,
@@ -52,7 +53,8 @@ export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
         if(editMode){
             updateContact(payload)
         }else{
-            addContact(payload);
+            addContact(payload);            
+            await insertContact(payload)
         }        
         setContact(initialFormData)
         setActiveContact('')

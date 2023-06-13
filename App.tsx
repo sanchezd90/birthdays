@@ -1,22 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import Navbar from './components/Navbar'
 import {useFonts} from 'expo-font'
 import AppLoading from 'expo-app-loading'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Geburtstage from './screens/geburtstage/Geburtstage';
-import Home from './screens/home/Home';
 import Einstellungen from './screens/einstellungen/Einstellungen';
 import { NavigationContainer } from '@react-navigation/native';
 import {MaterialIcons} from '@expo/vector-icons'
 import { PaperProvider } from 'react-native-paper';
 import ContactsContextProvider from './store/context/contacts-context';
+import { init } from './utils/database';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+  const [dbInitialized, setDbInitialized] = useState(false)
+
+  useEffect(() => {
+    init().then(()=>{
+      console.log('db initialized');
+      setDbInitialized(true)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })    
+  }, [])
 
   const [fontsLoaded] = useFonts({
     'open-sans':require('./assets/fonts/OpenSans-Regular.ttf'),

@@ -25,8 +25,7 @@ export const Geburtstage = () => {
       setShowNewContactModal(true)
     }
 
-    useEffect(() => {
-      console.log(contacts);          
+    useEffect(() => {    
       setGroupedContacts(groupByMonth(contacts))           
     }, [contacts])    
 
