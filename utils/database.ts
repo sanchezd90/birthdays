@@ -90,3 +90,42 @@ export const fetchContact = (id) => {
 
     return promise
 }
+
+export const updateContact = (contact) => {
+    const promise = new Promise((resolve,reject)=>{
+        database.transaction((tx)=>{
+            tx.executeSql(`
+            UPDATE contacts8
+            SET firstName = ?, lastName = ?, birthdate = ?, hasReminder = ?
+            WHERE id = ?`,
+            [contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder, contact.id],
+            (_,result)=>{     
+                console.log(result);           
+                resolve(result)
+            },
+            (_,error)=>{
+                reject(error)
+            }
+            )
+        })
+    })
+}
+
+export const deleteContact = (id) => {
+    const promise = new Promise((resolve,reject)=>{
+        database.transaction((tx)=>{
+            tx.executeSql(`
+            DELETE FROM contacts8            
+            WHERE id = ?`,
+            [id],
+            (_,result)=>{     
+                console.log(result);           
+                resolve(result)
+            },
+            (_,error)=>{
+                reject(error)
+            }
+            )
+        })
+    })
+}

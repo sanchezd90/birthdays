@@ -4,7 +4,7 @@ import { Button, Switch, TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ContactsContext } from "../store/context/contacts-context";
 import { IContact } from "../interfaces/contacts";
-import { fetchContact, insertContact } from "../utils/database";
+import { deleteContact, fetchContact, insertContact, updateContact } from "../utils/database";
 
 interface ContactModalProps {
     show:boolean,
@@ -22,7 +22,7 @@ const initialFormData = {
 
 export const ContactModal = ({show,onClose}:ContactModalProps) => {
     const {activeContact,setActiveContact,contacts} = useContext(ContactsContext)
-    const {addContact, updateContact,removeContact} = useContext(ContactsContext)    
+    const {removeContact} = useContext(ContactsContext)    
     const [contact,setContact] = useState<IContact>(initialFormData)
     const [editMode,setEditMode] = useState<boolean>(false)    
 
@@ -60,7 +60,7 @@ export const ContactModal = ({show,onClose}:ContactModalProps) => {
             id:editMode?contact.id:Date.now().toString(),            
         }
         if(editMode){
-            updateContact(payload)
+            await updateContact(payload)
         }else{            
             await insertContact(payload)
         }        
@@ -73,7 +73,8 @@ export const ContactModal = ({show,onClose}:ContactModalProps) => {
         onClose()
     }  
     
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        await deleteContact(activeContact)
         removeContact(activeContact)
         setActiveContact('')
         onClose()

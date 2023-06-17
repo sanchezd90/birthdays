@@ -18,6 +18,7 @@ export const Geburtstage = () => {
     }
 
     const handleCloseModal = () => {
+        loadContacts()
         setShowNewContactModal(false)
     }    
 
