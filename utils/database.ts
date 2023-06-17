@@ -6,7 +6,7 @@ export const init = () => {
     const promise = new Promise((resolve,reject)=>{        
         database.transaction((tx)=>{
             tx.executeSql(
-                `CREATE TABLE IF NOT EXISTS contacts8 (
+                `CREATE TABLE IF NOT EXISTS contacts (
                     id TEXT PRIMARY KEY NOT NULL,
                     firstName TEXT NOT NULL,
                     lastName TEXT NOT NULL,
@@ -29,7 +29,7 @@ export const init = () => {
 export const insertContact = (contact) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
-            tx.executeSql(`INSERT INTO contacts8 (id, firstName, lastName, birthdate, hasReminder) VALUES (?, ?, ?, ?, ?)`,
+            tx.executeSql(`INSERT INTO contacts (id, firstName, lastName, birthdate, hasReminder) VALUES (?, ?, ?, ?, ?)`,
             [contact.id, contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder],
             (_,result)=>{                
                 resolve(result)
@@ -45,7 +45,7 @@ export const insertContact = (contact) => {
 export const fetchContacts = () => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
-            tx.executeSql(`SELECT * FROM contacts8`,
+            tx.executeSql(`SELECT * FROM contacts`,
             [],
             (_,result)=>{
                 
@@ -55,7 +55,7 @@ export const fetchContacts = () => {
                         birthdate:contact.birthdate.split('T')[0],
                         hasReminder:contact.hasReminder!==0
                     }
-                })                
+                })                               
                 resolve(contacts)
             },
             (_,error)=>{
@@ -71,7 +71,7 @@ export const fetchContacts = () => {
 export const fetchContact = (id) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
-            tx.executeSql(`SELECT * FROM contacts8 WHERE id = ?`,
+            tx.executeSql(`SELECT * FROM contacts WHERE id = ?`,
             [id],
             (_,result)=>{                
                 const contact = {
@@ -95,7 +95,7 @@ export const updateContact = (contact) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
             tx.executeSql(`
-            UPDATE contacts8
+            UPDATE contacts
             SET firstName = ?, lastName = ?, birthdate = ?, hasReminder = ?
             WHERE id = ?`,
             [contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder, contact.id],
@@ -114,7 +114,7 @@ export const deleteContact = (id) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
             tx.executeSql(`
-            DELETE FROM contacts8            
+            DELETE FROM contacts            
             WHERE id = ?`,
             [id],
             (_,result)=>{                     
