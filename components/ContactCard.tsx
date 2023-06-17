@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text,View } from 'react-native';
-import { parseDay } from '../utils/common';
+import { parseDay } from '../utils/common'
+import { FontAwesome } from '@expo/vector-icons'; 
 
-export const ContactCard = ({contact}) =>{
+export const ContactCard = ({contact}) =>{  
     return (
         <View style={styles.card}>
                 <View style={styles.date}>
@@ -14,11 +15,13 @@ export const ContactCard = ({contact}) =>{
                   </View>
                   <View style={{ width: '60%', paddingVertical: 10 }}>
                     <Text style={{ color: 'white', fontSize: 18 }}>{contact?.firstName} {contact?.lastName}</Text>
-                    <Text style={{ color: '#285afc' }}>{contact?.birthdate.split('T')[0]}</Text>
+                    <Text style={{ color: '#285afc' }}>{contact?.birthdate}</Text>
                   </View>
-                  {/* <View style={{ width: '20%', justifyContent:'center', alignItems:'center' }}>
-                    {contact?.hasReminder && <FontAwesome name="bell" size={24} color="#285afc" />}                    
-                  </View> */}
+                  <View style={{ width: '20%', justifyContent:'center', alignItems:'center' }}>
+                    <Text>
+                      {contact?.hasReminder && <FontAwesome name="bell" size={24} color="#285afc" />}                    
+                    </Text>
+                  </View>
                 </View>
               </View>
     )

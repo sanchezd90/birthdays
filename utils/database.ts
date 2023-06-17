@@ -31,8 +31,7 @@ export const insertContact = (contact) => {
         database.transaction((tx)=>{
             tx.executeSql(`INSERT INTO contacts8 (id, firstName, lastName, birthdate, hasReminder) VALUES (?, ?, ?, ?, ?)`,
             [contact.id, contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder],
-            (_,result)=>{
-                console.log(result)
+            (_,result)=>{                
                 resolve(result)
             },
             (_,error)=>{
@@ -57,7 +56,30 @@ export const fetchContacts = () => {
                         hasReminder:contact.hasReminder!==0
                     }
                 })                
-                resolve(result.rows._array)
+                resolve(contacts)
+            },
+            (_,error)=>{
+                reject(error)
+            }
+            )
+        })
+    })
+
+    return promise
+}
+
+export const fetchContact = (id) => {
+    const promise = new Promise((resolve,reject)=>{
+        database.transaction((tx)=>{
+            tx.executeSql(`SELECT * FROM contacts8 WHERE id = ?`,
+            [id],
+            (_,result)=>{                
+                const contact = {
+                        ...result.rows._array[0],
+                        birthdate:result.rows._array[0].birthdate.split('T')[0],
+                        hasReminder:result.rows._array[0].hasReminder!==0
+                    }                                     
+                resolve(contact)
             },
             (_,error)=>{
                 reject(error)

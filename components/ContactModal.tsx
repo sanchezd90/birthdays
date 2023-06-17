@@ -4,7 +4,7 @@ import { Button, Switch, TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ContactsContext } from "../store/context/contacts-context";
 import { IContact } from "../interfaces/contacts";
-import { insertContact } from "../utils/database";
+import { fetchContact, insertContact } from "../utils/database";
 
 interface ContactModalProps {
     show:boolean,
@@ -20,15 +20,24 @@ const initialFormData = {
     hasReminder:false
 }
 
-export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
+export const ContactModal = ({show,onClose}:ContactModalProps) => {
     const {activeContact,setActiveContact,contacts} = useContext(ContactsContext)
     const {addContact, updateContact,removeContact} = useContext(ContactsContext)    
     const [contact,setContact] = useState<IContact>(initialFormData)
     const [editMode,setEditMode] = useState<boolean>(false)    
 
+    const loadContact = async (id) => {            
+        try{
+          const fetchedContact = await fetchContact(id)                  
+          if(fetchedContact) setContact(fetchedContact as any)   
+        }catch(error){
+          console.log(error);
+        }       
+      }  
+
     useEffect(() => {             
         if(activeContact){
-            setContact(contacts.find(contact=>contact.id===activeContact))
+            loadContact(activeContact)
             setEditMode(true)
         }else{
             setContact(initialFormData)
@@ -52,8 +61,7 @@ export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
         }
         if(editMode){
             updateContact(payload)
-        }else{
-            addContact(payload);                    
+        }else{            
             await insertContact(payload)
         }        
         setContact(initialFormData)
