@@ -32,5 +32,6 @@ export const groupByMonth = (contactList:Array<IContact>) => {
 }
 
 export const parseDay = (date:string) => {
-    return date.split('-')[2][0]==='0'?date.split('-')[2][1]:date.split('-')[2]
+    const onlyDate = date.split('T')[0]    
+    return onlyDate.split('-')[2][0]==='0'?onlyDate.split('-')[2][1]:onlyDate.split('-')[2]
 }

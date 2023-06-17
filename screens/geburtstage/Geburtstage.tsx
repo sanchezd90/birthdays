@@ -5,9 +5,10 @@ import ActionBar from '../../components/ActionBar';
 import ContactModal from "../../components/ContactModal";
 import { groupByMonth } from "../../utils/common";
 import { ContactsContext } from "../../store/context/contacts-context";
+import { fetchContacts } from "../../utils/database";
 
 export const Geburtstage = () => {
-    const {setActiveContact,contacts} = useContext(ContactsContext)
+    const {setActiveContact} = useContext(ContactsContext)
     const [showNewContactModal, setShowNewContactModal] = useState<boolean>(false)
     const [groupedContacts, setGroupedContacts] = useState([])     
 
@@ -25,32 +26,43 @@ export const Geburtstage = () => {
       setShowNewContactModal(true)
     }
 
-    useEffect(() => {    
-      setGroupedContacts(groupByMonth(contacts))           
-    }, [contacts])    
+    const loadContacts = async () => {          
+      try{
+        const contacts = await fetchContacts()        
+        if(contacts as any){                    
+          setGroupedContacts(groupByMonth(contacts as any))           
+        }          
+      }catch(error){
+        console.log(error);
+      }       
+    }  
+
+    useEffect(() => {               
+      loadContacts()           
+    }, [])          
 
     return <View style={{flex:10}}>
         <ActionBar handleNewContactAction={handleNewContactAction}/>
-        <ContactModal show={showNewContactModal} onClose={handleCloseModal}/>
-        <View style={styles.mainView}>            
-            <SectionList
-                sections={groupedContacts}
-                keyExtractor={(item, index) => item + index}
-                renderItem={(itemData)=>{
-                    return (<View style={styles.contact}>
-                        <Pressable onPress={()=>{handleContactPress(itemData.item.id)}}>
-                          <ContactCard contact={itemData.item}/>
-                        </Pressable>
-                    </View>
-                    )
-                }}
-                renderSectionHeader={({section}) => {
-                  if(section.data.length>0)return(                    
-                    <Text style={styles.monthTitle}> 
-                        {section.name}                   
-                    </Text>  
-                )}}                                
-                />                          
+        <ContactModal show={showNewContactModal} onClose={handleCloseModal}/>                       
+        <View style={styles.mainView}>          
+          {groupedContacts.length>0 && <SectionList
+              sections={groupedContacts}
+              keyExtractor={(item, index) => item + index}
+              renderItem={(itemData)=>{
+                  return (<View style={styles.contact}>
+                      <Pressable onPress={()=>{handleContactPress(itemData.item.id)}}>
+                        <ContactCard contact={itemData.item}/>
+                      </Pressable>
+                  </View>
+                  )
+              }}
+              renderSectionHeader={({section}) => {                            
+                if(section?.data?.length>0)return(                    
+                  <Text style={styles.monthTitle}> 
+                      {section.name}                   
+                  </Text>  
+              )}}                                
+            />}                     
         </View>
     </View>
 }

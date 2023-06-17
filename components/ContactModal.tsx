@@ -53,7 +53,7 @@ export const ContactModal = ({show,onClose,id}:ContactModalProps) => {
         if(editMode){
             updateContact(payload)
         }else{
-            addContact(payload);            
+            addContact(payload);                    
             await insertContact(payload)
         }        
         setContact(initialFormData)
