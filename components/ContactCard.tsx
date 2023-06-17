@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text,View } from 'react-native';
-import { parseDay } from '../utils/common'
+import { calculateAge, parseDay } from '../utils/common'
 import { FontAwesome } from '@expo/vector-icons'; 
 
 export const ContactCard = ({contact}) =>{  
@@ -15,7 +15,7 @@ export const ContactCard = ({contact}) =>{
                   </View>
                   <View style={{ width: '60%', paddingVertical: 10 }}>
                     <Text style={{ color: 'white', fontSize: 18 }}>{contact?.firstName} {contact?.lastName}</Text>
-                    <Text style={{ color: '#285afc' }}>{contact?.birthdate}</Text>
+                    <Text style={{ color: '#285afc' }}>Wird {calculateAge(contact?.birthdate)+1}</Text>
                   </View>
                   <View style={{ width: '20%', justifyContent:'center', alignItems:'center' }}>
                     <Text>

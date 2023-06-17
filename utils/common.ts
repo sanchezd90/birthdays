@@ -45,3 +45,17 @@ export const groupByMonth = (contactList:Array<IContact>) => {
 export const parseDay = (date:string) => {    
     return date.split('-')[2][0]==='0'?date.split('-')[2][1]:date.split('-')[2]
 }
+
+export const calculateAge = (birthDate) => {
+    const now = new Date();
+    const dob = new Date(birthDate);
+  
+    let age = now.getFullYear() - dob.getFullYear();
+    const monthDiff = now.getMonth() - dob.getMonth();
+  
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) {
+      age--;
+    }
+  
+    return age;
+  }
