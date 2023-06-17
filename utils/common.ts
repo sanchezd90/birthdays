@@ -21,14 +21,25 @@ export const belongsToMonth = (targetMonth:string,date:string) => {
     return targetMonth===month
 }
 
-export const groupByMonth = (contactList:Array<IContact>) => {        
-    const groupedList = months.map((month)=>{
-        return {
-            ...month,
-            data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate))
+export const groupByMonth = (contactList:Array<IContact>) => {   
+    const currentMonth = new Date().getMonth()     
+    const thisYearList = []
+    const nextYearList = []
+    months.map((month)=>{
+        if(parseInt(month.id)<=currentMonth){
+            nextYearList.push({
+                ...month,
+                data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate))
+            })
+        }else{
+            thisYearList.push({
+                ...month,
+                data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate))
+            })
         }
     })
-    return groupedList 
+
+    return thisYearList.concat(nextYearList) 
 }
 
 export const parseDay = (date:string) => {    

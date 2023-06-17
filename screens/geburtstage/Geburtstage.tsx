@@ -5,7 +5,7 @@ import ActionBar from '../../components/ActionBar';
 import ContactModal from "../../components/ContactModal";
 import { groupByMonth } from "../../utils/common";
 import { ContactsContext } from "../../store/context/contacts-context";
-import { fetchContact, fetchContacts } from "../../utils/database";
+import { fetchContacts } from "../../utils/database";
 
 export const Geburtstage = () => {
     const {setActiveContact} = useContext(ContactsContext)

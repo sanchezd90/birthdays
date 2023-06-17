@@ -99,8 +99,7 @@ export const updateContact = (contact) => {
             SET firstName = ?, lastName = ?, birthdate = ?, hasReminder = ?
             WHERE id = ?`,
             [contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder, contact.id],
-            (_,result)=>{     
-                console.log(result);           
+            (_,result)=>{                               
                 resolve(result)
             },
             (_,error)=>{
@@ -118,8 +117,7 @@ export const deleteContact = (id) => {
             DELETE FROM contacts8            
             WHERE id = ?`,
             [id],
-            (_,result)=>{     
-                console.log(result);           
+            (_,result)=>{                     
                 resolve(result)
             },
             (_,error)=>{
