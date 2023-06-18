@@ -8,7 +8,7 @@ import { ContactsContext } from "../../store/context/contacts-context";
 import { fetchContacts } from "../../utils/database";
 
 export const Geburtstage = () => {
-    const {setActiveContact,importFlag, updateImportFlag} = useContext(ContactsContext)
+    const {setActiveContact,importFlag, updateImportFlag} = useContext(ContactsContext)    
     const [showNewContactModal, setShowNewContactModal] = useState<boolean>(false)
     const [groupedContacts, setGroupedContacts] = useState([])     
 
@@ -39,7 +39,7 @@ export const Geburtstage = () => {
     }  
 
     useEffect(() => {                   
-      loadContacts()           
+      loadContacts()                 
     }, [])
 
     useEffect(() => {                   

@@ -6,7 +6,6 @@ import { Button } from "react-native-paper";
 import { useNavigation } from '@react-navigation/native';
 import { fetchContacts, insertContact } from "../../utils/database";
 import { ContactsContext } from "../../store/context/contacts-context";
-import { IContact } from "../../interfaces/contacts";
 
 export const Kontakte = () => {
   

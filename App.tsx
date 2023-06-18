@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {useFonts} from 'expo-font'
@@ -8,18 +8,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Geburtstage from './screens/geburtstage/Geburtstage';
 import Einstellungen from './screens/einstellungen/Einstellungen';
 import Kontakte from './screens/kontakte/Kontakte';
-import Anmeldung from './screens/anmeldung/Anmeldung'
+import Profil from './screens/profil/Profil'
 import { NavigationContainer } from '@react-navigation/native';
 import {MaterialIcons} from '@expo/vector-icons'
 import { PaperProvider } from 'react-native-paper';
 import ContactsContextProvider from './store/context/contacts-context';
+import UsersContextProvider from './store/context/users-context';
 import { init } from './utils/database';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-
-  const [dbInitialized, setDbInitialized] = useState(false)
+  
+  const [dbInitialized, setDbInitialized] = useState(false)  
 
   useEffect(() => {
     init().then(()=>{
@@ -39,14 +40,15 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading/>
   }
-
+  
   return (
     <PaperProvider>
       <View style={styles.container}>
         <StatusBar style='light'/>
         <SafeAreaView style={{flex:1}}>
+          <UsersContextProvider>            
           <ContactsContextProvider>            
-            <NavigationContainer>
+            <NavigationContainer>              
               <Tab.Navigator
                 screenOptions={({ route }) => ({
                   tabBarIcon: () => {
@@ -60,8 +62,8 @@ export default function App() {
                       iconName = 'contacts'
                     } else if (route.name === 'Einstellungen') {
                       iconName = 'settings'
-                    } else if (route.name === 'Anmeldung') {
-                      iconName = 'login'
+                    } else if (route.name === 'Profil') {
+                      iconName = 'person'
                     } 
                     
 
@@ -74,10 +76,11 @@ export default function App() {
                 <Tab.Screen name="Geburtstage" component={Geburtstage} />
                 <Tab.Screen name="Kontakte" component={Kontakte} />
                 <Tab.Screen name="Einstellungen" component={Einstellungen} />
-                <Tab.Screen name="Anmeldung" component={Anmeldung} />
+                <Tab.Screen name="Profil" component={Profil} />
               </Tab.Navigator>
             </NavigationContainer>                        
           </ContactsContextProvider>
+          </UsersContextProvider> 
         </SafeAreaView>
       </View>
     </PaperProvider>
