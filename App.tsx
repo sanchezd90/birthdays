@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Geburtstage from './screens/geburtstage/Geburtstage';
 import Einstellungen from './screens/einstellungen/Einstellungen';
 import Kontakte from './screens/kontakte/Kontakte';
+import Anmeldung from './screens/anmeldung/Anmeldung'
 import { NavigationContainer } from '@react-navigation/native';
 import {MaterialIcons} from '@expo/vector-icons'
 import { PaperProvider } from 'react-native-paper';
@@ -59,8 +60,11 @@ export default function App() {
                       iconName = 'contacts'
                     } else if (route.name === 'Einstellungen') {
                       iconName = 'settings'
+                    } else if (route.name === 'Anmeldung') {
+                      iconName = 'login'
                     } 
-                        
+                    
+
                     return <MaterialIcons name={iconName as any} size={25} color={'#285afc'}/>
                   },
                   tabBarStyle: { backgroundColor: '#1c1c1c' },
@@ -70,6 +74,7 @@ export default function App() {
                 <Tab.Screen name="Geburtstage" component={Geburtstage} />
                 <Tab.Screen name="Kontakte" component={Kontakte} />
                 <Tab.Screen name="Einstellungen" component={Einstellungen} />
+                <Tab.Screen name="Anmeldung" component={Anmeldung} />
               </Tab.Navigator>
             </NavigationContainer>                        
           </ContactsContextProvider>

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "BirthdatesApp",
-    "slug": "BirthdatesApp",
+    "slug": "birthdatesapp",    
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -43,6 +43,12 @@
           "contactsPermission": "Allow birthdatesapp to access your contacts."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8ea6b286-53aa-4cd7-8ecd-6301b711639d"
+      }
+    },
+    "owner": "sanchezd90"     
   }
 }
