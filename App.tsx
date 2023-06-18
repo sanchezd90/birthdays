@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Geburtstage from './screens/geburtstage/Geburtstage';
 import Einstellungen from './screens/einstellungen/Einstellungen';
+import Kontakte from './screens/kontakte/Kontakte';
 import { NavigationContainer } from '@react-navigation/native';
 import {MaterialIcons} from '@expo/vector-icons'
 import { PaperProvider } from 'react-native-paper';
@@ -54,6 +55,8 @@ export default function App() {
                       iconName = 'calendar-today'                    
                     } else if (route.name === 'Geburtstage') {
                       iconName = 'cake'                
+                    } else if (route.name === 'Kontakte') {
+                      iconName = 'contacts'
                     } else if (route.name === 'Einstellungen') {
                       iconName = 'settings'
                     } 
@@ -65,6 +68,7 @@ export default function App() {
                 })}
               >              
                 <Tab.Screen name="Geburtstage" component={Geburtstage} />
+                <Tab.Screen name="Kontakte" component={Kontakte} />
                 <Tab.Screen name="Einstellungen" component={Einstellungen} />
               </Tab.Navigator>
             </NavigationContainer>                        

@@ -7,19 +7,16 @@ export const ContactsContext = createContext({
     setActiveContact: (id:string) => {},
     addContact: (contact:IContact) => {},
     updateContact: (contact:IContact) => {},
-    removeContact: (id:string) => {},
+    removeContact: (id:string) => {},  
+    importFlag:false,  
+    updateImportFlag: (boolean) => {}
 })
 
 const ContactsContextProvider = ({children}) =>{
 
     const [activeContact,setActiveContact] = useState<string>('')
-    const [contacts, setContacts] = useState<IContact[]>([{
-        id:"1",
-        firstName:"Matías",
-        lastName:"Rodríguez",
-        birthdate:"1989-03-24",
-        hasReminder:false
-    },])
+    const [contacts, setContacts] = useState<IContact[]>([])
+    const [importFlag,setImportFlag] = useState<boolean>(false)
 
     const addContact = (contact:IContact) => {
         setContacts((currentContacts)=>[...currentContacts,contact])
@@ -36,13 +33,19 @@ const ContactsContextProvider = ({children}) =>{
         setContacts((currentContacts)=>currentContacts.filter(currentContact=>currentContact.id!==id))
     }
 
+    const updateImportFlag = (flag:boolean) => {
+        setImportFlag(flag)
+    }
+
     const value = {
         activeContact:activeContact,
         setActiveContact:setActiveContact,
         contacts:contacts,
         addContact:addContact,
         updateContact:updateContact,
-        removeContact:removeContact
+        removeContact:removeContact,
+        updateImportFlag:updateImportFlag,
+        importFlag:importFlag
     }
 
     return <ContactsContext.Provider value={value}>{children}</ContactsContext.Provider>

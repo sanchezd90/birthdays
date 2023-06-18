@@ -1,7 +1,8 @@
 import React from "react"
 import { View, Text } from "react-native"
 
-export const Einstellungen = () => {
+export const Einstellungen = () => {  
+
     return (
         <View style={{flex:10}}>
             <View style={styles.titleWrapper as any}>
@@ -9,7 +10,7 @@ export const Einstellungen = () => {
                     Einstellungen
                 </Text>
             </View>                            
-            <View style={styles.mainView}>                
+            <View style={styles.mainView}>                           
             </View>            
         </View>
     )
@@ -35,4 +36,14 @@ const styles = {
         textAlign: 'center',
         fontFamily:'open-sans-bold'
     },
-}
+    formWrapper:{
+      flex:10,
+      padding:20,
+      gap:3,      
+    },
+    labels:{
+      color:'white',
+      fontSize:18,
+      marginTop:5
+    }
+  } 

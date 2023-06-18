@@ -21,6 +21,10 @@ export const belongsToMonth = (targetMonth:string,date:string) => {
     return targetMonth===month
 }
 
+export const getDayNumberFromString = (date:string) => {        
+    return parseInt(date.split('-')[2])
+} 
+
 export const groupByMonth = (contactList:Array<IContact>) => {   
     const currentMonth = new Date().getMonth()     
     const thisYearList = []
@@ -29,12 +33,12 @@ export const groupByMonth = (contactList:Array<IContact>) => {
         if(parseInt(month.id)<=currentMonth){
             nextYearList.push({
                 ...month,
-                data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate))
+                data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate)).sort((a, b) => getDayNumberFromString(a.birthdate) - getDayNumberFromString(b.birthdate))
             })
         }else{
             thisYearList.push({
                 ...month,
-                data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate))
+                data:contactList.filter(contact=>belongsToMonth(month.id,contact.birthdate)).sort((a, b) => getDayNumberFromString(a.birthdate) - getDayNumberFromString(b.birthdate))
             })
         }
     })
@@ -58,4 +62,30 @@ export const calculateAge = (birthDate) => {
     }
   
     return age;
+  }
+
+export const twoDigitNumber = (number) => {
+    if (number < 10) {
+        return '0' + number.toString();
+      } else {
+        return number.toString();
+      }
+}
+
+  export const parseImportedContacts = (importedContacts) => {    
+    const newContacts = []
+    importedContacts.map((contact,index)=>{
+        if(contact.birthday){            
+            const birthdayString = contact.birthday ? `${contact.birthday.year}-${twoDigitNumber(contact.birthday.month+1)}-${twoDigitNumber(contact.birthday.day)}`: null
+            newContacts.push({
+                id:`${Date.now().toString()}${index}`,
+                importedId:contact.id,
+                firstName:contact.firstName,
+                lastName:contact.lastName,
+                birthdate:birthdayString,
+                hasReminder:true
+            })
+        }
+    })
+    return newContacts
   }

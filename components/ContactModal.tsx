@@ -14,6 +14,7 @@ interface ContactModalProps {
 
 const initialFormData = {
     id:'',
+    importedId:'',
     firstName:'',
     lastName:'',
     birthdate:new Date().toISOString(),
@@ -90,8 +91,8 @@ export const ContactModal = ({show,onClose}:ContactModalProps) => {
                     <View style={styles.headerOption}>
                         <Text style={{...styles.headerText,color:'white'}}>Info</Text>
                     </View>   
-                    <Pressable style={styles.headerOption} disabled={!contact.firstName||!contact.lastName} onPress={handleSubmit}>
-                        <Text style={{...styles.headerText,color:contact.firstName&&contact.lastName?'white':'gray'}}>{editMode?'Speichern':'Hinzufügen'}</Text>
+                    <Pressable style={styles.headerOption} disabled={!contact.firstName} onPress={handleSubmit}>
+                        <Text style={{...styles.headerText,color:contact.firstName?'white':'gray'}}>{editMode?'Speichern':'Hinzufügen'}</Text>
                     </Pressable>                                     
                 </View>
                 <View style={styles.formWrapper}>

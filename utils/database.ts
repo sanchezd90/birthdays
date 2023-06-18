@@ -6,12 +6,13 @@ export const init = () => {
     const promise = new Promise((resolve,reject)=>{        
         database.transaction((tx)=>{
             tx.executeSql(
-                `CREATE TABLE IF NOT EXISTS contacts (
+                `CREATE TABLE IF NOT EXISTS contactsNew (
                     id TEXT PRIMARY KEY NOT NULL,
                     firstName TEXT NOT NULL,
                     lastName TEXT NOT NULL,
                     birthdate TEXT NOT NULL,
-                    hasReminder INTEGER NOT NULL
+                    hasReminder INTEGER NOT NULL,
+                    importedId TEXT NOT NULL
                 )`,
                 [],
                 () => {
@@ -29,8 +30,8 @@ export const init = () => {
 export const insertContact = (contact) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
-            tx.executeSql(`INSERT INTO contacts (id, firstName, lastName, birthdate, hasReminder) VALUES (?, ?, ?, ?, ?)`,
-            [contact.id, contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder],
+            tx.executeSql(`INSERT INTO contactsNew (id, firstName, lastName, birthdate, hasReminder,importedId) VALUES (?, ?, ?, ?, ?, ?)`,
+            [contact.id, contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder, contact.importedId],
             (_,result)=>{                
                 resolve(result)
             },
@@ -40,23 +41,24 @@ export const insertContact = (contact) => {
             )
         })
     })
+    return promise
 }
 
 export const fetchContacts = () => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
-            tx.executeSql(`SELECT * FROM contacts`,
+            tx.executeSql(`SELECT * FROM contactsNew`,
             [],
             (_,result)=>{
                 
-                const contacts = result.rows._array.map(contact=>{
+                const contactsNew = result.rows._array.map(contact=>{
                     return {
                         ...contact,
                         birthdate:contact.birthdate.split('T')[0],
                         hasReminder:contact.hasReminder!==0
                     }
                 })                               
-                resolve(contacts)
+                resolve(contactsNew)
             },
             (_,error)=>{
                 reject(error)
@@ -71,7 +73,7 @@ export const fetchContacts = () => {
 export const fetchContact = (id) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
-            tx.executeSql(`SELECT * FROM contacts WHERE id = ?`,
+            tx.executeSql(`SELECT * FROM contactsNew WHERE id = ?`,
             [id],
             (_,result)=>{                
                 const contact = {
@@ -95,7 +97,7 @@ export const updateContact = (contact) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
             tx.executeSql(`
-            UPDATE contacts
+            UPDATE contactsNew
             SET firstName = ?, lastName = ?, birthdate = ?, hasReminder = ?
             WHERE id = ?`,
             [contact.firstName,contact.lastName,contact.birthdate,contact.hasReminder, contact.id],
@@ -114,7 +116,7 @@ export const deleteContact = (id) => {
     const promise = new Promise((resolve,reject)=>{
         database.transaction((tx)=>{
             tx.executeSql(`
-            DELETE FROM contacts            
+            DELETE FROM contactsNew            
             WHERE id = ?`,
             [id],
             (_,result)=>{                     
