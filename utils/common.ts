@@ -81,7 +81,7 @@ export const twoDigitNumber = (number) => {
                 id:`${Date.now().toString()}${index}`,
                 importedId:contact.id,
                 firstName:contact.firstName,
-                lastName:contact.lastName,
+                lastName:contact?.lastName||'',
                 birthdate:birthdayString,
                 hasReminder:true
             })
