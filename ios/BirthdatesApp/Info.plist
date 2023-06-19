@@ -25,7 +25,6 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>https://auth.expo.io/@sanchezd90/birthdatesapp</string>
           <string>com.anonymous.BirthdatesApp</string>
         </array>
       </dict>
