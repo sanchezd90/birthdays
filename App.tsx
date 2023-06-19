@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import {useFonts} from 'expo-font'
-import AppLoading from 'expo-app-loading'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Geburtstage from './screens/geburtstage/Geburtstage';
@@ -38,7 +37,7 @@ export default function App() {
   })
 
   if (!fontsLoaded) {
-    return <AppLoading/>
+    return <View></View>
   }
   
   return (
@@ -93,5 +92,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     paddingTop: 50,
+    backgroundColor:'black'
   },  
 });
