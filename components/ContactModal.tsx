@@ -5,6 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { ContactsContext } from "../store/context/contacts-context";
 import { IContact } from "../interfaces/contacts";
 import { deleteContact, fetchContact, insertContact, updateContact } from "../utils/database";
+import * as Notifications from 'expo-notifications'
 
 interface ContactModalProps {
     show:boolean,
@@ -64,7 +65,8 @@ export const ContactModal = ({show,onClose}:ContactModalProps) => {
             await updateContact(payload)
         }else{            
             await insertContact(payload)
-        }        
+        }  
+        handleNotifications()      
         setContact(initialFormData)
         setActiveContact('')
         onClose()
@@ -79,6 +81,20 @@ export const ContactModal = ({show,onClose}:ContactModalProps) => {
         removeContact(activeContact)
         setActiveContact('')
         onClose()
+    }
+
+    const handleNotifications = () => { 
+        console.log('schedule notification');       
+        Notifications.scheduleNotificationAsync({
+            content:{
+                title:'A',
+                body:'B',
+                data:{c:'C'}
+            },
+            trigger:{
+                seconds:10
+            }
+        })
     }
 
     return (

@@ -42,7 +42,10 @@
         {
           "contactsPermission": "Allow birthdatesapp to access your contacts."
         }
-      ]
+      ],
+      [
+        "expo-notifications"       
+      ]            
     ],
     "extra": {
       "eas": {

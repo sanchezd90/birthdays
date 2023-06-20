@@ -14,8 +14,19 @@ import { PaperProvider } from 'react-native-paper';
 import ContactsContextProvider from './store/context/contacts-context';
 import UsersContextProvider from './store/context/users-context';
 import { init } from './utils/database';
+import * as Notifications from 'expo-notifications'
 
 const Tab = createBottomTabNavigator();
+
+Notifications.setNotificationHandler({
+  handleNotification: async() => {
+    return {
+      shouldPlaySound:false,
+      shouldSetBadge:false,
+      shouldShowAlert:true
+    }
+  }
+})
 
 export default function App() {
   
@@ -24,12 +35,12 @@ export default function App() {
   useEffect(() => {
     init().then(()=>{
       console.log('db initialized');
-      setDbInitialized(true)
+      setDbInitialized(true)      
     })
     .catch((err)=>{
       console.log(err)
     })    
-  }, [])
+  }, []) 
 
   const [fontsLoaded] = useFonts({
     'open-sans':require('./assets/fonts/OpenSans-Regular.ttf'),
